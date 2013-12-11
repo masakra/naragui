@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+	<file alias="server-database.png">../icons/48/server-database.png</file>
+ </qresource>
+</RCC>
+
