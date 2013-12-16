@@ -70,6 +70,10 @@ class DialogConnect : public QDialog
 		 */
 		QString u2u( const char * utf8 ) const;
 
+		QSqlDatabase * m_db;
+
+		void init( const QString & title );
+
 	private slots:
 		void doConnect();
 		void check();
@@ -81,7 +85,24 @@ class DialogConnect : public QDialog
 		DialogConnect( const QString & title, const QString & driver,
 				QWidget * parent = 0 );
 
+		/*! \fn DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent = 0 )
+		 *
+		 * Вариант коструктора для имеющегося экземпляра QSqlDatabase. Не создаёт подключения к
+		 * базе данных. Заполняет поля в \a db для подключения
+		 */
+		DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent = 0 );
+
 		void setBanner( const QPixmap & pixmap );
+
+		QString hostName() const;
+
+		QString port() const;
+
+		QString databaseName() const;
+
+		QString userName() const;
+
+		QString password() const;
 };
 
 #endif

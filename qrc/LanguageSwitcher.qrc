@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+	<file alias="ru-flag.png">../icons/flag_18x13/ru.png</file>
+	<file alias="en-flag.png">../icons/flag_18x13/en.png</file>
+ </qresource>
+</RCC>
+

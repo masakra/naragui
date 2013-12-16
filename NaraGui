@@ -1,0 +1,3 @@
+#include "src/DialogConnect.h"
+#include "src/LabelClickable.h"
+#include "src/LanguageSwitcher.h"

@@ -23,7 +23,19 @@
 DialogConnect::DialogConnect( const QString & title, const QString & driver,
 		QWidget * parent )
 	: QDialog( parent ), m_driver( driver ),
-	m_codec( QTextCodec::codecForName("UTF-8") )
+	m_codec( QTextCodec::codecForName("UTF-8") ), m_db( 0 )
+{
+	init( title );
+}
+
+DialogConnect::DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent )
+	: QDialog( parent ), m_codec( QTextCodec::codecForName("UTF-8") ), m_db( db )
+{
+	init( title );
+}
+
+void
+DialogConnect::init( const QString & title )
 {
 	setWindowTitle( title );
 	setWindowIcon( QIcon::fromTheme("network-server",
@@ -75,7 +87,7 @@ DialogConnect::createWidgets()
 
 	QVBoxLayout * layoutButtons = new QVBoxLayout();
 	m_buttonOk = new QPushButton( u2u("Ok") );
-	connect( m_buttonOk, SIGNAL( clicked() ), SLOT( doConnect() ) );
+	connect( m_buttonOk, SIGNAL( clicked() ), m_db ? SLOT( accept() ) : SLOT( doConnect() ) );
 
 	QPushButton * buttonClose = new QPushButton( u2u("Закрыть") );
 	connect( buttonClose, SIGNAL( clicked() ), SLOT( close() ) );
@@ -236,5 +248,35 @@ DialogConnect::showEvent( QShowEvent * event )
 
 	move( ( desktop.width() - width() ) / 2,
 			( desktop.height() - height() ) / 2 );
+}
+
+QString
+DialogConnect::hostName() const
+{
+	return m_editHost->text();
+}
+
+QString
+DialogConnect::port() const
+{
+	return m_editPort->text();
+}
+
+QString
+DialogConnect::databaseName() const
+{
+	return m_editDatabase->text();
+}
+
+QString
+DialogConnect::userName() const
+{
+	return m_editUsername->text();
+}
+
+QString
+DialogConnect::password() const
+{
+	return m_editPassword->text();
 }
 
