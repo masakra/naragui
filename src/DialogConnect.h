@@ -60,7 +60,6 @@ class DialogConnect : public QDialog
 		QHBoxLayout * createLabeledEdit( QLineEdit ** edit,
 				const QString & labelText );
 		void loadSettings();
-		void saveSettings();
 
 		QTextCodec * m_codec;
 
@@ -93,6 +92,8 @@ class DialogConnect : public QDialog
 		DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent = 0 );
 
 		void setBanner( const QPixmap & pixmap );
+
+		void saveSettings();
 
 		QString hostName() const;
 
