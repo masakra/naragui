@@ -18,6 +18,10 @@
  /** \class LabelClickable
   *
   * \brief QLabel реагирующий на нажатие мыши
+  *
+  * При нажатии мыши срабатывает сигнал mouseClicked().
+  *
+  * \sa void mouseClicked()
   */
 
 #ifndef LABELCLICKABLE_H
@@ -28,6 +32,7 @@
 class LabelClickable : public QLabel
 {
 	Q_OBJECT
+
 	protected:
 		virtual void mousePressEvent( QMouseEvent * e );
 
@@ -36,9 +41,7 @@ class LabelClickable : public QLabel
 
 	Q_SIGNALS:
 		void mouseClicked();
-
 };
 
 #endif
-
 
