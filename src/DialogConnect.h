@@ -86,7 +86,7 @@ class DialogConnect : public QDialog
 
 		/*! \fn DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent = 0 )
 		 *
-		 * Вариант коструктора для имеющегося экземпляра QSqlDatabase. Не создаёт подключения к
+		 * Вариант конструктора для имеющегося экземпляра QSqlDatabase. Не создаёт подключения к
 		 * базе данных. Заполняет поля в \a db для подключения
 		 */
 		DialogConnect( const QString & title, QSqlDatabase * db, QWidget * parent = 0 );
