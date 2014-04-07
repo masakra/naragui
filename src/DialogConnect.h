@@ -25,6 +25,7 @@
 
 #include <QDialog>
 
+class QGridLayout;
 class QGroupBox;
 class QHBoxLayout;
 class QLabel;
@@ -57,8 +58,9 @@ class DialogConnect : public QDialog
 		void setLabelHint();
 
 		void createWidgets();
-		QHBoxLayout * createLabeledEdit( QLineEdit ** edit,
-				const QString & labelText );
+
+		void createLabeledEdit( QLineEdit ** edit, const QString & labelText, QGridLayout * gridLayout, int row );
+
 		void loadSettings();
 
 		QTextCodec * m_codec;

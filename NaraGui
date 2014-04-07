@@ -2,3 +2,5 @@
 #include "src/Frame.h"
 #include "src/LabelClickable.h"
 #include "src/LanguageSwitcher.h"
+
+#define NORDAVIA_RA "Nordavia-RA"

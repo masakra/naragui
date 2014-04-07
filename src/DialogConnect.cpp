@@ -19,6 +19,7 @@
 
 #include <QtGui>
 #include <QtSql>
+#include <NaraPg>
 
 DialogConnect::DialogConnect( const QString & title, const QString & driver,
 		QWidget * parent )
@@ -55,11 +56,9 @@ DialogConnect::createWidgets()
 	// группа User
 
 	QGroupBox * groupUser = new QGroupBox( u2u("Пользователь") );
-	QVBoxLayout * layoutUser = new QVBoxLayout( groupUser );
-	layoutUser->addLayout( createLabeledEdit( &m_editUsername,
-				u2u("&Пользователь") ) );
-	layoutUser->addLayout( createLabeledEdit( &m_editPassword,
-				u2u("П&ароль") ) );
+	QGridLayout * layoutUser = new QGridLayout( groupUser );
+	createLabeledEdit( &m_editUsername, u2u("&Пользователь"), layoutUser, 0 );
+	createLabeledEdit( &m_editPassword, u2u("П&ароль"), layoutUser, 1 );
 	m_editPassword->setEchoMode( QLineEdit::Password );
 
 	connect( m_editUsername, SIGNAL( textChanged( const QString ) ),
@@ -71,11 +70,11 @@ DialogConnect::createWidgets()
 	m_labelHint->setEnabled( false );
 
 	m_groupServer = new QGroupBox( u2u("Сервер") );
-	QVBoxLayout * layoutServer = new QVBoxLayout( m_groupServer );
-	layoutServer->addLayout( createLabeledEdit( &m_editHost, u2u("&Сервер") ) );
-	layoutServer->addLayout( createLabeledEdit( &m_editPort, u2u("П&орт") ) );
-	layoutServer->addLayout( createLabeledEdit( &m_editDatabase,
-				u2u("База &данных") ) );
+	QGridLayout * layoutServer = new QGridLayout( m_groupServer );
+
+	createLabeledEdit( &m_editHost, u2u("&Сервер"), layoutServer, 0 );
+	createLabeledEdit( &m_editPort, u2u("П&орт"), layoutServer, 1 );
+	createLabeledEdit( &m_editDatabase, u2u("База &данных"), layoutServer, 2 );
 	m_groupServer->hide(); // при запуске не показывать
 
 	connect( m_editHost, SIGNAL( textChanged( const QString & ) ),
@@ -170,26 +169,17 @@ DialogConnect::saveSettings()
 void
 DialogConnect::doConnect()
 {
-	QSqlDatabase db = QSqlDatabase::addDatabase( m_driver );
-
-	db.setHostName( m_editHost->text() );
-	db.setPort( m_editPort->text().toInt() );
-	db.setDatabaseName( m_editDatabase->text() );
-	db.setUserName( m_editUsername->text() );
-	db.setPassword( m_editPassword->text() );
-	db.setConnectOptions( QString("application_name='%1 v.%2'")
-			.arg( qApp->applicationName() )
-			.arg( qApp->applicationVersion() ) );
-
-	if ( db.open() ) {
+	if( PgSchema::connect( m_editHost->text(), m_editPort->text(), m_editDatabase->text(),
+			m_editUsername->text(), m_editPassword->text(), qApp->applicationName(),
+			qApp->applicationVersion() ) ) {
 		saveSettings();
 		accept();
 	} else
-		QMessageBox::critical( this, "Error", db.lastError().text() );
+		QMessageBox::critical( this, "Error", PgSchema::lastDbError() );
 }
 
-QHBoxLayout *
-DialogConnect::createLabeledEdit( QLineEdit ** edit, const QString & labelText )
+void
+DialogConnect::createLabeledEdit( QLineEdit ** edit, const QString & labelText, QGridLayout * gridLayout, int row )
 {
 	( *edit ) = new QLineEdit( this );
 
@@ -197,13 +187,8 @@ DialogConnect::createLabeledEdit( QLineEdit ** edit, const QString & labelText )
 
 	label->setBuddy( *edit );
 
-	QHBoxLayout * layout = new QHBoxLayout();
-
-	layout->addWidget( label );
-	layout->addStretch();
-	layout->addWidget( *edit );
-
-	return layout;
+	gridLayout->addWidget( label, row, 0, Qt::AlignRight );
+	gridLayout->addWidget( *edit, row, 1 );
 }
 
 void

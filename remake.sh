@@ -2,10 +2,21 @@
 
 TARGET="naragui"
 MODULES="sql"
-GMAKE="/usr/local/bin/gmake"
-QMAKE="/usr/local/bin/qmake-qt4"
-COMPILER=clang
-CXX_FLAGS="-m64 -mmmx -msse -msse2 -msse3"
+VERSION="0.2.0"
+
+if [ ${OS} ]	# На Win* выдает что-то типа Windows_NT, на других платформах не определена
+then
+	GMAKE="/c/MinGW/bin/mingw32-make";
+	QMAKE="/c/Qt/4.8.4/bin/qmake";
+	LIBS="-L../narapg/release -lnarapg"
+else
+	GMAKE="/usr/local/bin/gmake"
+	QMAKE="/usr/local/bin/qmake-qt4"
+	LIBS="-L../narapg -lnarapg"
+fi
+
+DEFINES="VERSION=\\\\\\\"${VERSION}\\\\\\\""	# aaaaaaaaaaaaaaaaa fuck !!
+INCLUDEPATH="../narapg"
 
 ${GMAKE} distclean
 
@@ -23,10 +34,15 @@ then
 
 	sed -i -e 's/TEMPLATE = app/TEMPLATE = lib/g' ${TARGET}.pro;
 
+	# includepath
+	echo "INCLUDEPATH += ${INCLUDEPATH}" >> ${TARGET}.pro;
+	echo "include += ${INCLUDEPATH}";
+
+
 	echo "QMAKE_CXXFLAGS += ${CXX_FLAGS}" >> ${TARGET}.pro;
 	echo "C++ flags \"${CXX_FLAGS}\" was added.";
 
-	${QMAKE} -spec freebsd-${COMPILER}
+	${QMAKE}
 else
 	echo "ERROR: file ${TARGET}.pro not found."
 fi
