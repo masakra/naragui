@@ -38,6 +38,9 @@ then
 	echo "INCLUDEPATH += ${INCLUDEPATH}" >> ${TARGET}.pro;
 	echo "include += ${INCLUDEPATH}";
 
+	# libraries
+	echo "LIBS += ${LIBS}" >> ${TARGET}.pro;
+	echo "libraries += ${LIBS}";
 
 	echo "QMAKE_CXXFLAGS += ${CXX_FLAGS}" >> ${TARGET}.pro;
 	echo "C++ flags \"${CXX_FLAGS}\" was added.";
